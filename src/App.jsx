@@ -6,7 +6,7 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import AvailablePlaces from './components/AvailablePlaces.jsx';
 import { updateUserPlaces } from './http.js';
-
+import Error from './components/Error.jsx';
 
 function App() {
   const selectedPlace = useRef();
@@ -45,6 +45,11 @@ function App() {
     }
   }
 
+  function handleError() {
+    setErrorUpdatingUserPlaces(null);
+  }
+
+
   const handleRemovePlace = useCallback(async function handleRemovePlace() {
     setUserPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
@@ -53,16 +58,14 @@ function App() {
     setModalIsOpen(false);
   }, []);
 
-  function handleError() {
-    setErrorUpdatingUserPlaces(null);
-  }
 
   return (
     <>
       <Modal open={errorUpdatingUserPlaces} onClose={handleError}>
     {errorUpdatingUserPlaces && ( 
       <Error title = "Ada error pas update user places" 
-      message={errorUpdatingUserPlaces.message}/>
+      message={errorUpdatingUserPlaces.message}
+      onConfirm={handleError}/>
     )}
       </Modal>
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
